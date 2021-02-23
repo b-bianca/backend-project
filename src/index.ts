@@ -12,7 +12,7 @@ app.use(cors())
 
 
 /******************** ROUTES ********************/ 
-app.use("/users", userRouter)
+app.use("/user", userRouter)
 
 /******************** SERVER INIT ********************/ 
 const server = app.listen(3003, () => {
