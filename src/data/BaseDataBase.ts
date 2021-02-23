@@ -8,7 +8,7 @@ import Knex from "knex"
 dotenv.config()
 
 
-export default class BaseDataBase {
+export default class BaseDatabase {
 
     protected static USER_TABLE = "lamusic_users"
 
@@ -24,6 +24,6 @@ export default class BaseDataBase {
     });
  
     public static async destroyConnection(): Promise<void> {
-       await BaseDataBase.connection.destroy();
+       await BaseDatabase.connection.destroy();
     }
 }
