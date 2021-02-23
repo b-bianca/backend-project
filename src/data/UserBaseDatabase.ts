@@ -14,6 +14,8 @@ export class UserDatabase extends BaseDatabase {
                 nickname: user.getNickname(),
                 password: user.getPassword()
             })
+            .into(BaseDatabase.USER_TABLE)
+            
         }catch(error) {
             throw new Error(error.sqlMessage || error.message)
         }
