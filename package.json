@@ -1,10 +1,11 @@
 {
-  "name": "backend-project",
+  "name": "lamusic-backend-project",
   "version": "1.0.0",
   "description": "Projeto FullStack - BackEnd",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "createTable": "tsc && node ./build/src/migrations/MySqlSetup.js"
   },
   "repository": {
     "type": "git",
