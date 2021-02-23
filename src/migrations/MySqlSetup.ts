@@ -1,12 +1,12 @@
-import BaseDataBase from "../data/BaseDataBase"
+import BaseDatabase from "../data/BaseDatabase"
 
-export class MySqlSetup extends BaseDataBase {
+export class MySqlSetup extends BaseDatabase {
 
     static createTables = async () => {
         try {
-           
-           await BaseDataBase.connection.raw(`
-            CREATE TABLE IF NOT EXISTS ${BaseDataBase.USER_TABLE} (
+
+           await BaseDatabase.connection.raw(`
+            CREATE TABLE IF NOT EXISTS ${BaseDatabase.USER_TABLE} (
              id VARCHAR(255) PRIMARY KEY,
              name VARCHAR(255) NOT NULL,
              email VARCHAR(255) UNIQUE NOT NULL,
@@ -21,7 +21,7 @@ export class MySqlSetup extends BaseDataBase {
            console.log(error)
  
         } finally {
-           BaseDataBase.connection.destroy()
+           BaseDatabase.connection.destroy()
         }
     }
 }

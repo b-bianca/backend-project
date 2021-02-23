@@ -2,6 +2,7 @@
 import express, { Express } from "express"
 import cors from "cors"
 import { AddressInfo } from "net";
+import { userRouter } from "./controller/router/userRouter";
 
 
 /******************** CONFIG ********************/ 
@@ -11,7 +12,7 @@ app.use(cors())
 
 
 /******************** ROUTES ********************/ 
-
+app.use("/user", userRouter)
 
 /******************** SERVER INIT ********************/ 
 const server = app.listen(3003, () => {
