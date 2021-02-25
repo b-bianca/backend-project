@@ -1,6 +1,7 @@
 import { User } from "../business/entities/User";
 import BaseDatabase from "./BaseDatabase";
 
+
 export class UserDatabase extends BaseDatabase {
 
     private static toUserModel(user: any) {
