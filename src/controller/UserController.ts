@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { loginInput, signUpInput } from "../business/entities/User"
 import { UserBusiness } from "../business/UserBusiness"
-import { UserDatabase } from "../data/UserBaseDatabase"
+import { UserDatabase } from "../data/UserDatabase"
 import { HashManager } from "../services/HashManager"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"

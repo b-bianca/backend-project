@@ -1,4 +1,4 @@
-import { UserDatabase } from "../data/UserBaseDatabase";
+import { UserDatabase } from "../data/UserDatabase";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
@@ -8,10 +8,10 @@ import { CustomError } from "./error/CustomError";
 export class UserBusiness {
 
     constructor(
-        private idGenerator: IdGenerator = new IdGenerator(),
-        private hashManager: HashManager = new HashManager(),
-        private tokenManager: TokenManager = new TokenManager(),
-        private userDatabase: UserDatabase = new UserDatabase()
+        private idGenerator: IdGenerator,
+        private hashManager: HashManager,
+        private tokenManager: TokenManager,
+        private userDatabase: UserDatabase
     ) {}
 
     async createUser (input: signUpInput) {
@@ -25,7 +25,7 @@ export class UserBusiness {
             }
 
             if (!email.includes("@")) {
-                throw new CustomError(406, "Invalid email")
+                throw new CustomError(406, "Invalid email. All addresses must have an @")
             }
 
             if (nickname.length < 3) {
@@ -52,7 +52,7 @@ export class UserBusiness {
 
             const accessToken = this.tokenManager.generateToken({id})
 
-            return accessToken
+            return { accessToken }
 
         } catch (error) {
             throw new CustomError(error.statusCode || 400, error.message)
@@ -82,7 +82,7 @@ export class UserBusiness {
 
             const accessToken = this.tokenManager.generateToken({id: user.password})
 
-            return accessToken
+            return  { accessToken }
 
         } catch (error) {
             throw new CustomError(error.statusCode || 400, error.message)
