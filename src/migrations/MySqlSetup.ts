@@ -1,4 +1,4 @@
-import BaseDatabase from "../data/BaseDatabase"
+import BaseDatabase from "../data/BaseDatabase";
 
 export class MySqlSetup extends BaseDatabase {
 
@@ -15,12 +15,12 @@ export class MySqlSetup extends BaseDatabase {
             );
            `)
 
-           await BaseDatabase.connection.raw(`
-            CREATE TABLE IF NOT EXISTS ${BaseDatabase.GENRES_TABLE} (
-             genre ENUM ("AXÉ", "BLUES", "BOSSA NOVA", "COUNTRY", "DISCO", "ELETRONICA", "FORRO", "FUNK", "HEAVY METAL", "HIP HOP", "INDIE", "FOLK", "JAZZ", "MPB", "NEW WAVE", "POP", "PUNK", "REGGAE", "ROCK", "SAMBA", "SOFT ROCK") 
-             PRIMARY KEY 
-            );
-          `)
+          //  await BaseDatabase.connection.raw(`
+          //   CREATE TABLE IF NOT EXISTS ${BaseDatabase.GENRES_TABLE} (
+          //    genre ENUM ("AXÉ", "BLUES", "BOSSA NOVA", "COUNTRY", "DISCO", "ELETRONICA", "FORRO", "FUNK", "HEAVY METAL", "HIP HOP", "INDIE", "FOLK", "JAZZ", "MPB", "NEW WAVE", "POP", "PUNK", "REGGAE", "ROCK", "SAMBA", "SOFT ROCK") 
+          //   PRIMARY KEY 
+          //   );
+          // `)
 
            await BaseDatabase.connection.raw(`
             CREATE TABLE IF NOT EXISTS ${BaseDatabase.MUSICS_TABLE} (
@@ -37,12 +37,12 @@ export class MySqlSetup extends BaseDatabase {
           
            await BaseDatabase.connection.raw(`
             CREATE TABLE IF NOT EXISTS ${BaseDatabase.GENRES_MUSICS_TABLE} (
-             genre_id ENUM ("") NOT NULL,
+             genre ENUM("AXÉ", "BLUES", "BOSSA NOVA", "COUNTRY", "DISCO", "ELETRONICA", "FORRO", "FUNK", "HEAVY METAL", "HIP HOP", "INDIE", "FOLK", "JAZZ", "MPB", "NEW WAVE", "POP", "PUNK", "REGGAE", "ROCK", "SAMBA", "SOFT ROCK") NOT NULL,
              music_id VARCHAR(255) NOT NULL,
-             FOREIGN KEY(genre_id) REFERENCES ${BaseDatabase.GENRES_TABLE}(genre),
              FOREIGN KEY(music_id) REFERENCES ${BaseDatabase.MUSICS_TABLE}(id)
-           ); 
+            ); 
          `)
+
           console.log("MySql setup completed!")
  
         } catch (error) {
