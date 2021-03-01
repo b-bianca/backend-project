@@ -36,4 +36,36 @@ export class MusicController {
             res.status(error.statusCode || 400).send({ error: error.message })
         }
     }
+
+    async getAllMusics(req: Request, res: Response) {
+
+        try {
+
+            const token: string = req.headers.authorization!
+
+            const result = await musicBusiness.getAllMusics(token)
+
+            res.status(201).send({ message: "All musics", result })
+            
+        } catch (error) {
+            res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
+
+    async getMusicById(req: Request, res: Response) {
+
+        try {
+
+            const token: string = req.headers.authorization!
+
+            const IdMusic: string = req.params.id as string 
+
+            const result = await musicBusiness.getMusicById(token, IdMusic)
+
+            res.status(201).send({ message: "Selected music", result })
+            
+        } catch (error) {
+            res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
 }

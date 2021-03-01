@@ -1,7 +1,7 @@
 import { MusicDatabase } from "../data/MusicDatabase";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
-import { createMusicInput, Music } from "./entities/Music";
+import { createMusicInput, Music, musicOutput } from "./entities/Music";
 import { authenticationData } from "./entities/User";
 import { CustomError } from "./error/CustomError";
 
@@ -51,6 +51,54 @@ export class MusicBusiness {
 
         } catch (error) {
             throw new CustomError(error.statusCode || 400, error.message)
+        }
+    }
+
+    async getAllMusics (token: string) {
+
+        try {
+            
+            const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
+
+            if(!verifyToken) {
+                throw new CustomError(401, "Unauthorized. Verify token")
+            }
+
+            const userId = verifyToken.id
+
+            const result = await this.musicDatabase.getAllMusics(userId)
+
+            return { result }
+
+        } catch (error) {
+            throw new CustomError(error.statusCode || 400, error.message)
+        }
+    }
+
+    async getMusicById (token: string, id: string) {
+
+        try {
+            const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
+
+            if(!verifyToken) {
+                throw new CustomError(401, "Unauthorized. Verify token")
+            }
+
+            const result = await this.musicDatabase.getMusicById(id)
+
+            return  result 
+
+        } catch (error) {
+            if (error.message === "invalid signature" || 
+                error.message === "jwt expired" ||
+                error.message === "jwt must be provided" ||
+                error.message === "jwt malformed") {
+
+                throw new CustomError(404, "Invalid token")
+
+            } else {
+                throw new CustomError(error.statusCode || 400, error.message)
+            }
         }
     }
 }

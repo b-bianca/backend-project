@@ -6,7 +6,6 @@
   "scripts": {
     "test": "clear && echo \"Running tests...\" && jest",
     "createTable": "tsc && node ./build/src/migrations/MySqlSetup.js",
-    "populateTable": "tsc && node ./build/src/migrations/PopulateTable.js",
     "dev": " ts-node-dev ./src/index.ts"
   },
   "repository": {
