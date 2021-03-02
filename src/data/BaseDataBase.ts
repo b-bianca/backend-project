@@ -12,6 +12,7 @@ export default class BaseDatabase {
 
     protected static USERS_TABLE = "lamusic_users"
     protected static MUSICS_TABLE = "lamusic_musics"
+    protected static GENRES_TABLE = "lamusic_genres"
     protected static GENRES_MUSICS_TABLE = "lamusic_genres_musics"
 
     protected static connection: Knex = knex({

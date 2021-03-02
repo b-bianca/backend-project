@@ -5,19 +5,6 @@ import BaseDatabase from "./BaseDatabase";
 
 export class MusicDatabase extends BaseDatabase {
 
-    private static toMusicModel(music: any) {
-        return music && new Music(
-            music.id,
-            music.title,
-            music.author,
-            music.date,
-            music.file,
-            music.album,
-            music.user_id,
-            music.genres
-        )
-    }
-
     async createMusic(music: Music): Promise<void> {
         try {
             await BaseDatabase.connection
@@ -35,7 +22,7 @@ export class MusicDatabase extends BaseDatabase {
             for (let genre of music.genres) {
                 await BaseDatabase.connection
                     .insert({
-                        genre: genre,
+                        genre_id: genre,
                         music_id: music.id
                     })
                     .into(BaseDatabase.GENRES_MUSICS_TABLE)
@@ -46,6 +33,7 @@ export class MusicDatabase extends BaseDatabase {
         }
     }
 
+
     async getAllMusics(userId: string): Promise<any> {
         try {
            
@@ -55,7 +43,7 @@ export class MusicDatabase extends BaseDatabase {
                 .where({ user_id: userId })
 
             const resultGenres = await BaseDatabase.connection.raw(`
-                SELECT genre, music_id FROM ${BaseDatabase.MUSICS_TABLE}
+                SELECT genre_id, music_id FROM ${BaseDatabase.MUSICS_TABLE}
                 JOIN ${BaseDatabase.GENRES_MUSICS_TABLE}
                 ON ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.GENRES_MUSICS_TABLE}.music_id 
                 WHERE ${BaseDatabase.MUSICS_TABLE}.user_id = "${userId}"
@@ -71,8 +59,8 @@ export class MusicDatabase extends BaseDatabase {
             const musicResult = result.map((music: any) => {
                 const arrayFinal = []
 
-                for(let genreInfo of music.resultGenres) {
-                    arrayFinal.push(genreInfo.genre)
+                for(let genre of music.resultGenres) {
+                    arrayFinal.push(genre.genre_id)
                 }
 
                 return {
@@ -88,43 +76,32 @@ export class MusicDatabase extends BaseDatabase {
         }
     }
 
-    async getMusicById (id: string): Promise<object> {
+    async getMusicByProperty (key: string, value: string): Promise<object> {
 
         try {
 
         const result = await BaseDatabase.connection
             .select("*")
             .from(BaseDatabase.MUSICS_TABLE)
-            .where({ id })
+            .where(key, value)
 
-        const resultGenres = await BaseDatabase.connection.raw(`
-            SELECT genre, music_id FROM ${BaseDatabase.MUSICS_TABLE}
-            JOIN ${BaseDatabase.GENRES_MUSICS_TABLE}
-            ON ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.GENRES_MUSICS_TABLE}.music_id 
-            WHERE ${BaseDatabase.MUSICS_TABLE}.id = "${id}"
-            `)
+            for (let i = 0; i < result.length; i++){
+                const resultGenres = await BaseDatabase.connection.raw(`
+                    SELECT * FROM ${BaseDatabase.MUSICS_TABLE} 
+                    JOIN ${BaseDatabase.GENRES_MUSICS_TABLE}
+                    ON ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.GENRES_MUSICS_TABLE}.music_id
+                    WHERE ${BaseDatabase.MUSICS_TABLE}.id = "${value}"
 
-        for (let i = 0; i < result.length; i++) {
+                `)
+                
+                const genreMap = resultGenres[0].map((genre: any) => {
+                    return genre.genre_id
+                })
 
-            result[i].resultGenres = resultGenres[0].filter((genre: any) => {
-                return result[i].id === genre.music_id
-            }) //adicionando o resultGenre no result
-        }
-
-        const musicResult = result.map((music: any) => {
-            const arrayFinal = []
-
-            for(let genreInfo of music.resultGenres) {
-                arrayFinal.push(genreInfo.genre)
-            }
-
-            return {
-                ...music, 
-                resultGenres: arrayFinal
-            }
-        })
-
-        return musicResult
+                result[i].resultGenres = genreMap
+            }    
+           
+        return result[0]
 
         } catch (error) {
             throw new Error(error.sqlMessage || error.message)
