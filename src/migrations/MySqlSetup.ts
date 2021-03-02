@@ -30,7 +30,7 @@ export class MySqlSetup extends BaseDatabase {
 
           await BaseDatabase.connection.raw(`
             CREATE TABLE IF NOT EXISTS ${BaseDatabase.GENRES_TABLE} (
-               genre ENUM("AXÉ", "BLUES", "BOSSA NOVA", "COUNTRY", "DISCO", "ELETRONICA", "FORRO", "FUNK", "HEAVY METAL", "HIP HOP", "INDIE", "FOLK", "JAZZ", "MPB", "NEW WAVE", "POP", "PUNK", "REGGAE", "ROCK", "SAMBA", "SOFT ROCK") PRIMARY KEY NOT NULL
+               genre ENUM("AXÉ", "BLUES", "BOSSA NOVA", "COUNTRY", "DISCO", "ELETRONICA", "FORRO", "FUNK", "HEAVY METAL", "HIP HOP", "INDIE", "FOLK", "JAZZ", "MPB", "NEW WAVE", "POP", "PUNK", "REGGAE", "ROCK", "SAMBA", "SOFT ROCK") PRIMARY KEY
             ); 
           `)
          await BaseDatabase.connection.raw(`

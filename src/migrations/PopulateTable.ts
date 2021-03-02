@@ -1,5 +1,5 @@
-import BaseDatabase from "../data/BaseDatabase";
-import { MySqlSetup } from "./MySqlSetup";
+import BaseDatabase from "../data/BaseDatabase"
+import { MySqlSetup } from "./MySqlSetup"
 
 export class PopulateTable extends MySqlSetup {
 

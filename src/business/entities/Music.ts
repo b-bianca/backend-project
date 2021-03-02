@@ -7,7 +7,7 @@ export class Music {
         readonly file: string,
         readonly album: string,
         readonly userId: string,
-        readonly genres: genres[]
+        readonly genres: category[]
     ) {}
 }
 
@@ -35,12 +35,17 @@ export enum genres {
     SOFT_ROCK = "SOFT ROCK"
 }
 
+export interface category {
+    id: string,
+    genre:string
+
+}
 export interface createMusicInput {
     title: string,
     author: string,
     file: string,
     album: string,
-    genres: genres[]
+    genres: category[]
 }
 
 export interface musicOutput {
