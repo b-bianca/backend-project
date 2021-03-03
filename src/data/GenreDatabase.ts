@@ -28,7 +28,7 @@ export class GenreDatabase extends BaseDatabase {
                     date: music.date,
                     file: music.file,
                     album: music.album,
-                    userId: music.userId,
+                    userId: music.user_id,
                     genres: categories
                 });
             }

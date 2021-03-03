@@ -37,7 +37,6 @@ export class MusicDatabase extends BaseDatabase {
         }
     }
 
-
     async getAllMusics(userId: string): Promise<Music[]> {
         try {
            
@@ -87,7 +86,7 @@ export class MusicDatabase extends BaseDatabase {
         }
     }
 
-    async getMusicByProperty (key: string, value: string): Promise<any> {
+    async getMusicByProperty (key: string, value: string): Promise<Music[]> {
 
         try {
             const result = await BaseDatabase.connection
@@ -99,6 +98,19 @@ export class MusicDatabase extends BaseDatabase {
 
             return resultFinal
                       
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
+
+    async deleteMusic(id: string): Promise<any> {
+
+        try {
+            await BaseDatabase.connection
+            .delete()
+            .from(BaseDatabase.MUSICS_TABLE)
+            .where({id})
+        
         } catch (error) {
             throw new Error(error.sqlMessage || error.message)
         }
