@@ -2,8 +2,12 @@ import { format } from "path";
 import { category, genres, Music } from "../business/entities/Music";
 import { MusicBusiness } from "../business/MusicBusiness";
 import BaseDatabase from "./BaseDatabase";
+import { GenreDatabase } from "./GenreDatabase";
+
+const getGenre = new GenreDatabase()
 
 export class MusicDatabase extends BaseDatabase {
+
 
     async createMusic(music: Music): Promise<void> {
         try {
@@ -34,7 +38,7 @@ export class MusicDatabase extends BaseDatabase {
     }
 
 
-    async getAllMusics(userId: string): Promise<any> {
+    async getAllMusics(userId: string): Promise<Music[]> {
         try {
            
             const result = await BaseDatabase.connection
@@ -42,99 +46,59 @@ export class MusicDatabase extends BaseDatabase {
                 .from(BaseDatabase.MUSICS_TABLE)
                 .where({ user_id: userId })
 
-            const musics: Music[] = []
+                const resultFinal = getGenre.getGenre(result)
 
-            for (let music of result) {
-
-                const categories: category[] = []; 
-
-                const resultGenres = await BaseDatabase.connection.raw(`
-                    SELECT genre_id
-                    FROM ${BaseDatabase.MUSICS_TABLE}
-                    JOIN ${BaseDatabase.GENRES_MUSICS_TABLE}
-                    ON ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.GENRES_MUSICS_TABLE}.music_id 
-                    WHERE ${BaseDatabase.MUSICS_TABLE}.id = "${music.id}"            
-                `)
-                for (let gen of resultGenres[0]) {
-                    categories.push(gen.genre_id)
-                }
-                musics.push({
-                    id: music.id,
-                    title: music.title,
-                    author: music.author,
-                    date: music.date,
-                    file: music.file,
-                    album: music.album,
-                    userId: music.userId,
-                    genres: categories
-                });
-            }
-            return musics;
-
-        
+                return resultFinal
 
         } catch (error) {
             throw new Error(error.sqlMessage || error.message)
         }
     }
 
-    async getMusicByProperty (key: string, value: string): Promise<object> {
+    async getMusicById (id: string): Promise<Music> {
 
         try {
 
         const result = await BaseDatabase.connection
             .select("*")
             .from(BaseDatabase.MUSICS_TABLE)
+            .where({id})
+            
+            for (let i = 0; i < result.length; i++){
+                const resultGenres = await BaseDatabase.connection.raw(`
+                    SELECT * FROM ${BaseDatabase.MUSICS_TABLE} 
+                    JOIN ${BaseDatabase.GENRES_MUSICS_TABLE}
+                    ON ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.GENRES_MUSICS_TABLE}.music_id
+                    WHERE ${BaseDatabase.MUSICS_TABLE}.id = "${id}"
+
+                `)
+                
+                const genreMap = resultGenres[0].map((genre: any) => {
+                    return genre.genre_id
+                })
+
+                result[i].resultGenres = genreMap
+            }    
+           
+        return result[0]
+
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
+
+    async getMusicByProperty (key: string, value: string): Promise<any> {
+
+        try {
+            const result = await BaseDatabase.connection
+            .select("*")
+            .from(BaseDatabase.MUSICS_TABLE)
             .where(key, "like" ,`%${value}%`)
 
-            const musics: Music[] = []
+            const resultFinal = getGenre.getGenre(result)
 
-            for (let music of result) {
-
-                const categories: category[] = []; 
-
-                  const resultGenres = await BaseDatabase.connection.raw(`
-                     SELECT * FROM ${BaseDatabase.MUSICS_TABLE} 
-                     JOIN ${BaseDatabase.GENRES_MUSICS_TABLE}
-                     ON ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.GENRES_MUSICS_TABLE}.music_id
-                     WHERE ${BaseDatabase.MUSICS_TABLE}.id = "${value}"
-
-                 `)
-
-                for (let gen of resultGenres[0]) {
-                    categories.push(gen.genre_id)
-                }
-                musics.push({
-                    id: music.id,
-                    title: music.title,
-                    author: music.author,
-                    date: music.date,
-                    file: music.file,
-                    album: music.album,
-                    userId: music.userId,
-                    genres: categories
-                });
-            }
-            return musics;
-
-        //     for (let i = 0; i < result.length; i++){
-        //         const resultGenres = await BaseDatabase.connection.raw(`
-        //             SELECT * FROM ${BaseDatabase.MUSICS_TABLE} 
-        //             JOIN ${BaseDatabase.GENRES_MUSICS_TABLE}
-        //             ON ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.GENRES_MUSICS_TABLE}.music_id
-        //             WHERE ${BaseDatabase.MUSICS_TABLE}.id = "${value}"
-
-        //         `)
-                
-        //         const genreMap = resultGenres[0].map((genre: any) => {
-        //             return genre.genre_id
-        //         })
-
-        //         result[i].resultGenres = genreMap
-        //     }    
-           
-        // return result[0]
-
+            return resultFinal
+                      
         } catch (error) {
             throw new Error(error.sqlMessage || error.message)
         }

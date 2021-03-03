@@ -68,4 +68,25 @@ export class MusicController {
             res.status(error.statusCode || 400).send({ error: error.message })
         }
     }
+
+    async getMusicByAuthorOrTitle(req: Request, res: Response) {
+
+        try {
+
+            const token: string = req.headers.authorization!
+
+            const title = req.query.title as string
+
+            const author = req.query.author as string
+
+            const album = req.query.album as string
+            
+            const result = await musicBusiness.getMusicByAuthorOrTitle(token, title, author, album)
+
+            res.status(201).send({ message: "Selected music", result })
+            
+        } catch (error) {
+            res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
 }

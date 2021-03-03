@@ -17,15 +17,23 @@ export class MusicBusiness {
         
         try {
             const { title, author, file, album, genres } = input
-
+            
             if(!title || !author || !file || !album || !genres) {
                 throw new CustomError(405, "Please fill in all fields")
             }
             
             const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
-
+            
             if(!verifyToken) {
                 throw new CustomError(401, "Unauthorized. Verify token")
+            }
+
+            const musics = await this.musicDatabase.getAllMusics(verifyToken.id)
+           
+            const musicAlreadyExist = musics && musics.find((music) => (music.title === title) && (music.author === author) && (music.album === album))
+
+            if(musicAlreadyExist) {
+                throw new CustomError(422, "Music already registered")
             }
 
             const id: string = this.idGenerator.generate()
@@ -84,7 +92,7 @@ export class MusicBusiness {
                 throw new CustomError(401, "Unauthorized. Verify token")
             }
 
-            const result = await this.musicDatabase.getMusicByProperty("id", id)
+            const result = await this.musicDatabase.getMusicById(id)
 
             return  result 
 
@@ -102,7 +110,7 @@ export class MusicBusiness {
         }
     }
 
-    async getMusicByAuthorOrTitle (token: string, id: string) {
+    async getMusicByAuthorOrTitle (token: string, title: string, author: string, album: string) {
 
         try {
             const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
@@ -110,8 +118,24 @@ export class MusicBusiness {
             if(!verifyToken) {
                 throw new CustomError(401, "Unauthorized. Verify token")
             }
+           
+            if(!title && !author && !album){
+                throw new CustomError(406, "Please inform 'title', 'author' or 'album'")
+            }
 
-            const result = await this.musicDatabase.getMusicByProperty("id", id)
+            let result
+            
+            if (title) {
+               result = await this.musicDatabase.getMusicByProperty("title", title)
+            } else if (author) {
+               result = await this.musicDatabase.getMusicByProperty("author", author)
+            } else {
+                result = await this.musicDatabase.getMusicByProperty("album", album)
+            }
+            
+            if(!result.length){
+                throw new CustomError(404, "Title, author or album not found")
+            }
 
             return  result 
 
