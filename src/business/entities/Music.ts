@@ -47,11 +47,3 @@ export interface createMusicInput {
     album: string,
     genres: category[]
 }
-
-export interface musicOutput {
-    title: string,
-    author: string,
-    file: string,
-    album: string,
-    genres: genres[]
-}
