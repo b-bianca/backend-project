@@ -25,7 +25,7 @@ export class UserDatabase extends BaseDatabase {
                 nickname: user.nickname,
                 password: user.password
             })
-            .into(BaseDatabase.USER_TABLE)
+            .into(BaseDatabase.USERS_TABLE)
             
         }catch(error) {
             throw new Error(error.sqlMessage || error.message)
@@ -37,7 +37,7 @@ export class UserDatabase extends BaseDatabase {
         try {
             const result = await BaseDatabase.connection
             .select("*")
-            .from(BaseDatabase.USER_TABLE)
+            .from(BaseDatabase.USERS_TABLE)
             .where({email: input})
             .orWhere({nickname: input })
 

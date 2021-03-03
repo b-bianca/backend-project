@@ -80,7 +80,7 @@ export class UserBusiness {
                 throw new CustomError(401, "Invalid password")
             }
 
-            const accessToken = this.tokenManager.generateToken({id: user.password})
+            const accessToken = this.tokenManager.generateToken({id: user.id})
 
             return  { accessToken }
 
