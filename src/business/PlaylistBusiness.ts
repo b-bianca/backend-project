@@ -84,15 +84,6 @@ export class PlaylistBusiness {
                 throw new CustomError(401, "Unauthorized. Verify token")
             }
 
-    //pq não funcionaaaaa
-            // const musics = await this.playlistDatabase.getMusicsByPlaylistId(playlistId)
-            //    console.log(musics)
-            // const musicAlreadyExist = musics && musics.find((mus) => mus.id === musicId)
-    
-            // if(musicAlreadyExist) {
-            //     throw new CustomError(422, "Music already included")
-            // }
-
             const musicsPlaylist: musicsPlaylist = {
                 musicId,
                 playlistId
@@ -109,15 +100,12 @@ export class PlaylistBusiness {
 
                 throw new CustomError(404, "Invalid token")
 
-             } //else if (error.message === `Duplicate entry '${music_id}' for key 'music_id'`)  
-             //{throw new CustomError(409, "Music already included")
-                 
-                 else {
+             } else if (error.message.includes('music_id')) {
+                 throw new CustomError(409, "Music already included")
+             }  else {
                 throw new CustomError(error.statusCode || 400, error.message)
             }
-            
         }
-
     }
     
     async getAllPlaylists (token: string) {
