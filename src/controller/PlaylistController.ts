@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { createPlaylistInput } from "../business/entities/Playlist"
+import { createPlaylistInput, musicsPlaylist } from "../business/entities/Playlist"
 import { PlaylistBusiness } from "../business/PlaylistBusiness"
 import { PlaylistDatabase } from "../data/PlaylistDatabase"
 import { IdGenerator } from "../services/IdGenerator"
@@ -27,6 +27,56 @@ export class PlaylistControler {
             const playlist = await playlistBusiness.createPlaylist(token, input)
 
             res.status(201).send({ message: "Playlist created successfully!", playlist })
+            
+        } catch (error) {
+            res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
+
+    async putMusicToPlaylist(req: Request, res: Response) {
+
+        try {
+            const token: string = req.headers.authorization!
+
+            const input: musicsPlaylist = {
+                musicId: req.body.musicId,
+                playlistId: req.body.playlistId
+            }
+
+            await playlistBusiness.putMusicToPlaylist(token, input)
+
+            res.status(201).send({ message: "Music included in the playlist" })
+            
+        } catch (error) {
+            res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
+
+    async getAllPlaylists(req: Request, res: Response) {
+
+        try {
+            const token: string = req.headers.authorization!
+
+            const playlist = await playlistBusiness.getAllPlaylists(token)
+
+            res.status(201).send({ message: "All playlists", playlist })
+            
+        } catch (error) {
+            res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
+
+    async getPlaylistById(req: Request, res: Response) {
+
+        try {
+
+            const token: string = req.headers.authorization!
+
+            const id: string = req.params.id as string 
+
+            const result = await playlistBusiness.getPlaylistById(token, id)
+
+            res.status(201).send({ message: "Selected playlist", result })
             
         } catch (error) {
             res.status(error.statusCode || 400).send({ error: error.message })

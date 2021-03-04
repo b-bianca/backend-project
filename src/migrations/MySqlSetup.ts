@@ -49,7 +49,9 @@ export class MySqlSetup extends BaseDatabase {
                title VARCHAR(60) NOT NULL,
                subtitle VARCHAR(255) NOT NULL,
                image VARCHAR(255) NOT NULL,
-               date DATE DEFAULT (CURDATE())
+               date DATE DEFAULT (CURDATE()),
+               user_id VARCHAR(255) NOT NULL,
+               FOREIGN KEY(user_id) REFERENCES ${BaseDatabase.USERS_TABLE}(id) ON DELETE CASCADE
             ); 
            `)
 
@@ -57,7 +59,7 @@ export class MySqlSetup extends BaseDatabase {
             CREATE TABLE IF NOT EXISTS ${BaseDatabase.PLAYLIST_MUSICS_TABLE} (
                playlist_id VARCHAR(255),
                music_id VARCHAR(255),
-               FOREIGN KEY(playlist_id) REFERENCES ${BaseDatabase.PLAYLIST_TABLE}(id), ON DELETE CASCADE
+               FOREIGN KEY(playlist_id) REFERENCES ${BaseDatabase.PLAYLIST_TABLE}(id) ON DELETE CASCADE,
                FOREIGN KEY(music_id) REFERENCES ${BaseDatabase.MUSICS_TABLE}(id) ON DELETE CASCADE
             );
            `)

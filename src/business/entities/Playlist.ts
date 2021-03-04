@@ -4,6 +4,7 @@ export class Playlist {
         readonly title: string,
         readonly subtitle: string,
         readonly date: Date,
+        readonly userId: string,
         readonly image?: string //= "no-image"
     ) {}
 }
@@ -14,3 +15,7 @@ export interface createPlaylistInput {
     image?: string
 }
 
+export interface musicsPlaylist{
+    musicId: string,
+    playlistId: string
+}

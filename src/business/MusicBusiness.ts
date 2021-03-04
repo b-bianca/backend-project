@@ -1,7 +1,7 @@
 import { MusicDatabase } from "../data/MusicDatabase";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
-import { createMusicInput, Music, musicOutput } from "./entities/Music";
+import { createMusicInput, Music } from "./entities/Music";
 import { authenticationData } from "./entities/User";
 import { CustomError } from "./error/CustomError";
 
