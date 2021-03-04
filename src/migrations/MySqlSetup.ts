@@ -48,7 +48,7 @@ export class MySqlSetup extends BaseDatabase {
                id VARCHAR(255) PRIMARY KEY,
                title VARCHAR(60) NOT NULL,
                subtitle VARCHAR(255) NOT NULL,
-               image VARCHAR(255) NOT NULL,
+               image VARCHAR(255) NULL,
                date DATE DEFAULT (CURDATE()),
                user_id VARCHAR(255) NOT NULL,
                FOREIGN KEY(user_id) REFERENCES ${BaseDatabase.USERS_TABLE}(id) ON DELETE CASCADE
@@ -57,8 +57,8 @@ export class MySqlSetup extends BaseDatabase {
 
            await BaseDatabase.connection.raw(`
             CREATE TABLE IF NOT EXISTS ${BaseDatabase.PLAYLIST_MUSICS_TABLE} (
-               playlist_id VARCHAR(255),
-               music_id VARCHAR(255),
+               playlist_id VARCHAR(255) NOT NULL,
+               music_id VARCHAR(255) UNIQUE NOT NULL,
                FOREIGN KEY(playlist_id) REFERENCES ${BaseDatabase.PLAYLIST_TABLE}(id) ON DELETE CASCADE,
                FOREIGN KEY(music_id) REFERENCES ${BaseDatabase.MUSICS_TABLE}(id) ON DELETE CASCADE
             );

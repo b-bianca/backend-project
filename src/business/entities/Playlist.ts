@@ -5,7 +5,7 @@ export class Playlist {
         readonly subtitle: string,
         readonly date: Date,
         readonly userId: string,
-        readonly image?: string //= "no-image"
+        readonly image?: string 
     ) {}
 }
 

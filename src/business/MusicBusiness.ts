@@ -34,7 +34,7 @@ export class MusicBusiness {
 
             if(musicAlreadyExist) {
                 throw new CustomError(422, "Music already registered")
-            }
+            }   
 
             const id: string = this.idGenerator.generate()
 
@@ -76,7 +76,7 @@ export class MusicBusiness {
 
             const result = await this.musicDatabase.getAllMusics(userId)
 
-            return { result }
+            return  result 
 
         } catch (error) {
             throw new CustomError(error.statusCode || 400, error.message)
@@ -115,9 +115,7 @@ export class MusicBusiness {
         try {
             const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
 
-            const userToken = verifyToken.id
-            
-            if(!userToken) {
+            if(!verifyToken) {
                 throw new CustomError(401, "Unauthorized. Verify token")
             }
            

@@ -1,4 +1,3 @@
-import { title } from "process";
 import { PlaylistDatabase } from "../data/PlaylistDatabase";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
@@ -33,7 +32,7 @@ export class PlaylistBusiness {
     
             const playlists = await this.playlistDatabase.getAllPlaylist(userId)
                
-            const playlistAlreadyExist = playlists && playlists.find((playlist) => playlist.title === title)
+            const playlistAlreadyExist = playlists && playlists.find((playlist) => playlist.title === title && playlist.subtitle === subtitle)
     
             if(playlistAlreadyExist) {
                 throw new CustomError(422, "Playlist already registered")
@@ -70,7 +69,6 @@ export class PlaylistBusiness {
         }
     }
 
-       
     async putMusicToPlaylist(token: string, input: musicsPlaylist) {
 
         try{
@@ -85,7 +83,16 @@ export class PlaylistBusiness {
              if(!verifyToken) {
                 throw new CustomError(401, "Unauthorized. Verify token")
             }
+
+    //pq não funcionaaaaa
+            // const musics = await this.playlistDatabase.getMusicsByPlaylistId(playlistId)
+            //    console.log(musics)
+            // const musicAlreadyExist = musics && musics.find((mus) => mus.id === musicId)
     
+            // if(musicAlreadyExist) {
+            //     throw new CustomError(422, "Music already included")
+            // }
+
             const musicsPlaylist: musicsPlaylist = {
                 musicId,
                 playlistId
@@ -102,9 +109,13 @@ export class PlaylistBusiness {
 
                 throw new CustomError(404, "Invalid token")
 
-            } else {
+             } //else if (error.message === `Duplicate entry '${music_id}' for key 'music_id'`)  
+             //{throw new CustomError(409, "Music already included")
+                 
+                 else {
                 throw new CustomError(error.statusCode || 400, error.message)
             }
+            
         }
 
     }
@@ -148,7 +159,7 @@ export class PlaylistBusiness {
         }
     }
 
-    async getPlaylistById (token: string, id: string) {
+    async getPlaylistByTitle (token: string, title: string) {
 
         try {
             const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
@@ -157,9 +168,17 @@ export class PlaylistBusiness {
                 throw new CustomError(401, "Unauthorized. Verify token")
             }
 
-            const result = await this.playlistDatabase.getPlaylistById(id)
+            if(!title){
+                throw new CustomError(406, "Please inform 'title' to search")
+            }
+           
+            const result = await this.playlistDatabase.getPlaylistByTitle(title)
+            
+            if(!result.length){
+                throw new CustomError(404, "Title not found")
+            }
 
-            return  result 
+            return result 
 
         } catch (error) {
             if (error.message === "invalid signature" || 
@@ -172,6 +191,22 @@ export class PlaylistBusiness {
             } else {
                 throw new CustomError(error.statusCode || 400, error.message)
             }
+        }
+    }
+
+    async getMusicsByPlaylistId(token: string, id: string) {
+        try {
+            const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
+
+            if(!verifyToken) {
+                throw new CustomError(401, "Unauthorized. Verify token")
+            }
+
+            const result = await this.playlistDatabase.getMusicsByPlaylistId(id)
+
+            return result
+        } catch (error) {
+            
         }
     }
 }

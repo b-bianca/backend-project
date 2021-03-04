@@ -99,7 +99,7 @@ export class MusicController {
 
             await musicBusiness.deleteMusic(token, id)
 
-            res.status(201).send({ message: "Music successfully deleted" })
+            res.status(201).send({ message: "Music successfully deleted", id })
         } catch (error) {
             res.status(error.statusCode || 400).send({ error: error.message })
         }

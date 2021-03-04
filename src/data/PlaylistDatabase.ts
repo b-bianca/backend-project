@@ -52,16 +52,48 @@ export class PlaylistDatabase extends BaseDatabase {
         }
     }
 
-    async getPlaylistById (id: string): Promise<Playlist> {
+    async getPlaylistByTitle (title: string): Promise<Playlist[]> {
 
         try {
 
         const result = await BaseDatabase.connection
             .select("*")
             .from(BaseDatabase.PLAYLIST_TABLE)
-            .where({id})
+            .where("title", "like" ,`%${title}%`)
             
-        return result[0]
+        return result
+
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
+
+    async getMusicsByPlaylistId(playlistId: string): Promise<Playlist[]> {
+        try {
+           
+             const result = await BaseDatabase.connection
+                .select("playlist_id")
+                .from(BaseDatabase.PLAYLIST_MUSICS_TABLE)
+                .where({playlist_id: playlistId})
+
+                for (let i = 0; i < result.length; i++){
+                    const musics = await BaseDatabase.connection.raw(`
+                        SELECT * FROM ${BaseDatabase.PLAYLIST_TABLE} 
+                        JOIN ${BaseDatabase.PLAYLIST_MUSICS_TABLE}
+                        ON ${BaseDatabase.PLAYLIST_TABLE}.id = ${BaseDatabase.PLAYLIST_MUSICS_TABLE}.playlist_id
+                        JOIN ${BaseDatabase.MUSICS_TABLE}
+                        ON ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.PLAYLIST_MUSICS_TABLE}.music_id
+                        WHERE ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.PLAYLIST_MUSICS_TABLE}.music_id
+                    `)
+                    
+                    const musicsMap = musics[0].map((music: any) => {
+                        return music.title
+                    })
+    
+                    result[i].musics = musicsMap
+                }    
+               
+            return result[0]
 
         } catch (error) {
             throw new Error(error.sqlMessage || error.message)

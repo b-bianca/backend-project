@@ -66,20 +66,35 @@ export class PlaylistControler {
         }
     }
 
-    async getPlaylistById(req: Request, res: Response) {
+    async getPlaylistByTitle(req: Request, res: Response) {
 
         try {
 
             const token: string = req.headers.authorization!
 
-            const id: string = req.params.id as string 
+            const title = req.query.title as string 
 
-            const result = await playlistBusiness.getPlaylistById(token, id)
+            const result = await playlistBusiness.getPlaylistByTitle(token, title)
 
             res.status(201).send({ message: "Selected playlist", result })
             
         } catch (error) {
             res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
+
+    async getMusicsByPlaylistId(req: Request, res: Response) {
+
+        try {
+            const token: string = req.headers.authorization!
+
+            const id = req.params.id as string
+
+            const playlist = await playlistBusiness.getMusicsByPlaylistId(token, id)
+
+            res.status(201).send({ message: "All musics", playlist })
+        } catch (error) {
+            
         }
     }
 }
