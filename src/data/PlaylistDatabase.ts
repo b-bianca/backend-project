@@ -99,4 +99,17 @@ export class PlaylistDatabase extends BaseDatabase {
             throw new Error(error.sqlMessage || error.message)
         }
     }
+
+    async deletePlaylist(id: string) {
+
+        try {
+            await BaseDatabase.connection
+            .delete()
+            .from(BaseDatabase.PLAYLIST_TABLE)
+            .where({id})
+        
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
 }

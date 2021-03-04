@@ -197,4 +197,31 @@ export class PlaylistBusiness {
             
         }
     }
+
+    async deletePlaylist(token: string, id: string) {
+
+        try {
+            const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
+
+            if(!verifyToken) {
+                throw new CustomError(401, "Unauthorized. Verify token")
+            }
+
+            const resultDelete = await this.playlistDatabase.deletePlaylist(id)
+
+            return resultDelete 
+
+        } catch (error) {
+              if (error.message === "invalid signature" || 
+                error.message === "jwt expired" ||
+                error.message === "jwt must be provided" ||
+                error.message === "jwt malformed") {
+
+            throw new CustomError(404, "Invalid token")
+
+            } else {
+                throw new CustomError(error.statusCode || 400, error.message)
+            }  
+        }
+    }
 }
