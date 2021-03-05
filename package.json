@@ -7,7 +7,9 @@
     "test": "clear && echo \"Running tests...\" && jest",
     "createTable": "tsc && node ./build/src/migrations/MySqlSetup.js",
     "populateTable": "tsc && node ./build/src/migrations/PopulateTable.js",
-    "dev": " ts-node-dev ./src/index.ts"
+    "dev": " ts-node-dev ./src/index.ts",
+    "start": "tsc && node ./build/src/index.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -16,7 +18,17 @@
   "keywords": [],
   "author": "Bianca Mendes",
   "license": "ISC",
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.16",
+    "mysql": "^2.18.1",
+    "uuid": "^8.3.2",
     "@types/axios": "^0.14.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.9",
@@ -30,17 +42,6 @@
     "ts-jest": "^26.5.1",
     "ts-node-dev": "^1.1.1",
     "typescript": "^4.1.3"
-  },
-  "dependencies": {
-    "axios": "^0.21.1",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "knex": "^0.21.16",
-    "mysql": "^2.18.1",
-    "uuid": "^8.3.2"
   },
   "bugs": {
     "url": "https://github.com/b-bianca/backend-project/issues"
