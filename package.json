@@ -3,17 +3,13 @@
   "version": "1.0.0",
   "description": "Projeto FullStack - BackEnd",
   "main": "index.js",
-  "engines": {
-    "node": "12.18.0"
-  },
-  "scripts": {
+   "scripts": {
     "test": "clear && echo \"Running tests...\" && jest",
     "createTable": "tsc && node ./build/src/migrations/MySqlSetup.js",
     "populateTable": "tsc && node ./build/src/migrations/PopulateTable.js",
     "dev": " ts-node-dev ./src/index.ts",
     "start": "tsc && node ./build/src/index.js",
-    "build": "tsc",
-    "heroku-postbuild": "npm run build"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
