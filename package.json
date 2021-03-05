@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Projeto FullStack - BackEnd",
   "main": "index.js",
-   "scripts": {
+  "engines": {
+    "node": "12.18.0"
+  },
+  "scripts": {
     "test": "clear && echo \"Running tests...\" && jest",
     "createTable": "tsc && node ./build/src/migrations/MySqlSetup.js",
     "populateTable": "tsc && node ./build/src/migrations/PopulateTable.js",
