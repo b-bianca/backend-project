@@ -20,8 +20,6 @@ export interface signUpInput {
 }
 
 export interface loginInput {
-    //email: string,
-    //nickname: string,
     input: string
     password: string
 }

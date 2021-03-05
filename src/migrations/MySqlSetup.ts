@@ -28,7 +28,7 @@ export class MySqlSetup extends BaseDatabase {
             ); 
            `)
 
-          await BaseDatabase.connection.raw(`
+         await BaseDatabase.connection.raw(`
             CREATE TABLE IF NOT EXISTS ${BaseDatabase.GENRES_TABLE} (
                genre ENUM("AXÉ", "BLUES", "BOSSA NOVA", "COUNTRY", "DISCO", "ELETRONICA", "FORRO", "FUNK", "HEAVY METAL", "HIP HOP", "INDIE", "FOLK", "JAZZ", "MPB", "NEW WAVE", "POP", "PUNK", "REGGAE", "ROCK", "SAMBA", "SOFT ROCK") PRIMARY   KEY 
             ); 
@@ -43,7 +43,7 @@ export class MySqlSetup extends BaseDatabase {
             ); 
            `)
 
-          await BaseDatabase.connection.raw(`
+         await BaseDatabase.connection.raw(`
             CREATE TABLE IF NOT EXISTS ${BaseDatabase.PLAYLIST_TABLE} (
                id VARCHAR(255) PRIMARY KEY,
                title VARCHAR(60) NOT NULL,
@@ -55,8 +55,9 @@ export class MySqlSetup extends BaseDatabase {
             ); 
            `)
 
-           await BaseDatabase.connection.raw(`
+         await BaseDatabase.connection.raw(`
             CREATE TABLE IF NOT EXISTS ${BaseDatabase.PLAYLIST_MUSICS_TABLE} (
+               id VARCHAR(255) PRIMARY KEY,
                playlist_id VARCHAR(255) NOT NULL,
                music_id VARCHAR(255) UNIQUE NOT NULL,
                FOREIGN KEY(playlist_id) REFERENCES ${BaseDatabase.PLAYLIST_TABLE}(id) ON DELETE CASCADE,

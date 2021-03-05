@@ -1,4 +1,4 @@
-import { musicsPlaylist, Playlist } from "../business/entities/Playlist";
+import { musicsPlaylist, musicsPlaylistInput, Playlist } from "../business/entities/Playlist";
 import BaseDatabase from "./BaseDatabase";
 
 export class PlaylistDatabase extends BaseDatabase {
@@ -22,11 +22,12 @@ export class PlaylistDatabase extends BaseDatabase {
         }
     }
 
-    async putMusicToPlaylist(musics: musicsPlaylist): Promise<void> {
+    async putMusicToPlaylist(musics: musicsPlaylistInput): Promise<void> {
 
         try {
             await BaseDatabase.connection
             .insert({
+                id: musics.id,
                 music_id: musics.musicId,
                 playlist_id: musics.playlistId
             })
@@ -100,13 +101,28 @@ export class PlaylistDatabase extends BaseDatabase {
         }
     }
 
-    async deletePlaylist(id: string) {
+    async deletePlaylist(id: string): Promise<any> {
 
         try {
             await BaseDatabase.connection
             .delete()
             .from(BaseDatabase.PLAYLIST_TABLE)
             .where({id})
+        
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
+
+    async deleteMusicFromPlaylist(id: string): Promise<any> {
+
+        try {
+           const result =  await BaseDatabase.connection
+                       .delete()
+                       .from(BaseDatabase.PLAYLIST_MUSICS_TABLE)
+                       .where({id})
+
+                return result
         
         } catch (error) {
             throw new Error(error.sqlMessage || error.message)

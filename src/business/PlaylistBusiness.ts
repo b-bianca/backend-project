@@ -1,7 +1,7 @@
 import { PlaylistDatabase } from "../data/PlaylistDatabase";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
-import { createPlaylistInput, musicsPlaylist, Playlist } from "./entities/Playlist";
+import { createPlaylistInput, musicsPlaylist, musicsPlaylistInput, Playlist } from "./entities/Playlist";
 import { authenticationData } from "./entities/User";
 import { CustomError } from "./error/CustomError";
 
@@ -84,14 +84,18 @@ export class PlaylistBusiness {
                 throw new CustomError(401, "Unauthorized. Verify token")
             }
 
-            const musicsPlaylist: musicsPlaylist = {
+            const id: string = this.idGenerator.generate()
+
+            const musPlaylist: musicsPlaylistInput = {
+                id, 
                 musicId,
                 playlistId
             }
                 
-            await this.playlistDatabase.putMusicToPlaylist(musicsPlaylist )
+            await this.playlistDatabase.putMusicToPlaylist(musPlaylist)
     
-            return musicsPlaylist 
+            return musPlaylist 
+
         } catch(error) {
             if (error.message === "invalid signature" || 
                 error.message === "jwt expired" ||
@@ -208,6 +212,37 @@ export class PlaylistBusiness {
             }
 
             const resultDelete = await this.playlistDatabase.deletePlaylist(id)
+
+            return resultDelete 
+
+        } catch (error) {
+              if (error.message === "invalid signature" || 
+                error.message === "jwt expired" ||
+                error.message === "jwt must be provided" ||
+                error.message === "jwt malformed") {
+
+            throw new CustomError(404, "Invalid token")
+
+            } else {
+                throw new CustomError(error.statusCode || 400, error.message)
+            }  
+        }
+    }
+
+    async deleteMusicFromPlaylist(token: string, id: string) {
+
+        try {
+            const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
+
+            if(!verifyToken) {
+                throw new CustomError(401, "Unauthorized. Verify token")
+            }
+
+            if(!id){
+                throw new CustomError(406, "Please inform 'id' to delete music")
+            }
+
+            const resultDelete = await this.playlistDatabase.deleteMusicFromPlaylist(id)
 
             return resultDelete 
 

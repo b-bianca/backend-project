@@ -112,4 +112,19 @@ export class PlaylistControler {
             res.status(error.statusCode || 400).send({ error: error.message })
         }
     }
+
+    async deleteMusicFromPlaylist(req: Request, res: Response) {
+
+        try {
+           const token: string = req.headers.authorization!
+
+           const id: string =  req.params.id
+                   
+           await playlistBusiness.deleteMusicFromPlaylist(token, id)
+
+            res.status(201).send({ message: "Music successfully deleted", id })
+        } catch (error) {
+            res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
 }
