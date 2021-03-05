@@ -1,6 +1,4 @@
-import { format } from "path";
-import { category, genres, Music } from "../business/entities/Music";
-import { MusicBusiness } from "../business/MusicBusiness";
+import { Music } from "../business/entities/Music";
 import BaseDatabase from "./BaseDatabase";
 import { GenreDatabase } from "./GenreDatabase";
 
@@ -36,7 +34,6 @@ export class MusicDatabase extends BaseDatabase {
             throw new Error(error.sqlMessage || error.message)
         }
     }
-
 
     async getAllMusics(userId: string): Promise<Music[]> {
         try {
@@ -87,7 +84,7 @@ export class MusicDatabase extends BaseDatabase {
         }
     }
 
-    async getMusicByProperty (key: string, value: string): Promise<any> {
+    async getMusicByProperty (key: string, value: string): Promise<Music[]> {
 
         try {
             const result = await BaseDatabase.connection
@@ -99,6 +96,19 @@ export class MusicDatabase extends BaseDatabase {
 
             return resultFinal
                       
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
+
+    async deleteMusic(id: string): Promise<any> {
+
+        try {
+            await BaseDatabase.connection
+            .delete()
+            .from(BaseDatabase.MUSICS_TABLE)
+            .where({id})
+        
         } catch (error) {
             throw new Error(error.sqlMessage || error.message)
         }

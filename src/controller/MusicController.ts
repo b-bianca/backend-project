@@ -69,7 +69,7 @@ export class MusicController {
         }
     }
 
-    async getMusicByAuthorOrTitle(req: Request, res: Response) {
+    async getMusicByAuthorTitleOrAlbum(req: Request, res: Response) {
 
         try {
 
@@ -81,10 +81,25 @@ export class MusicController {
 
             const album = req.query.album as string
             
-            const result = await musicBusiness.getMusicByAuthorOrTitle(token, title, author, album)
+            const result = await musicBusiness.getMusicByAuthorTitleOrAlbum(token, title, author, album)
 
             res.status(201).send({ message: "Selected music", result })
             
+        } catch (error) {
+            res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
+
+    async deleteMusic(req: Request, res: Response) {
+
+        try {
+            const token: string = req.headers.authorization!
+
+            const id: string = req.params.id as string 
+
+            await musicBusiness.deleteMusic(token, id)
+
+            res.status(201).send({ message: "Music successfully deleted", id })
         } catch (error) {
             res.status(error.statusCode || 400).send({ error: error.message })
         }

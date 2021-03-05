@@ -1,7 +1,7 @@
 import { MusicDatabase } from "../data/MusicDatabase";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
-import { createMusicInput, Music, musicOutput } from "./entities/Music";
+import { createMusicInput, Music } from "./entities/Music";
 import { authenticationData } from "./entities/User";
 import { CustomError } from "./error/CustomError";
 
@@ -34,7 +34,7 @@ export class MusicBusiness {
 
             if(musicAlreadyExist) {
                 throw new CustomError(422, "Music already registered")
-            }
+            }   
 
             const id: string = this.idGenerator.generate()
 
@@ -76,7 +76,7 @@ export class MusicBusiness {
 
             const result = await this.musicDatabase.getAllMusics(userId)
 
-            return { result }
+            return  result 
 
         } catch (error) {
             throw new CustomError(error.statusCode || 400, error.message)
@@ -110,7 +110,7 @@ export class MusicBusiness {
         }
     }
 
-    async getMusicByAuthorOrTitle (token: string, title: string, author: string, album: string) {
+    async getMusicByAuthorTitleOrAlbum (token: string, title: string, author: string, album: string) {
 
         try {
             const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
@@ -137,7 +137,7 @@ export class MusicBusiness {
                 throw new CustomError(404, "Title, author or album not found")
             }
 
-            return  result 
+            return result
 
         } catch (error) {
             if (error.message === "invalid signature" || 
@@ -150,6 +150,33 @@ export class MusicBusiness {
             } else {
                 throw new CustomError(error.statusCode || 400, error.message)
             }
+        }
+    }
+
+    async deleteMusic(token: string, id: string) {
+
+        try {
+            const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
+
+            if(!verifyToken) {
+                throw new CustomError(401, "Unauthorized. Verify token")
+            }
+
+            const resultDelete = await this.musicDatabase.deleteMusic(id)
+
+            return resultDelete 
+
+        } catch (error) {
+              if (error.message === "invalid signature" || 
+                error.message === "jwt expired" ||
+                error.message === "jwt must be provided" ||
+                error.message === "jwt malformed") {
+
+            throw new CustomError(404, "Invalid token")
+
+            } else {
+                throw new CustomError(error.statusCode || 400, error.message)
+            }  
         }
     }
 }

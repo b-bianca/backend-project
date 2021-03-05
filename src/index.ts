@@ -4,6 +4,7 @@ import cors from "cors"
 import { AddressInfo } from "net";
 import { userRouter } from "./controller/router/userRouter";
 import { musicRouter } from "./controller/router/musicRouter";
+import { playlistRouter } from "./controller/router/playlistRouter";
 
 
 /******************** CONFIG ********************/ 
@@ -15,6 +16,7 @@ app.use(cors())
 /******************** ROUTES ********************/ 
 app.use("/user", userRouter)
 app.use("/music", musicRouter)
+app.use("/playlist", playlistRouter)
 
 /******************** SERVER INIT ********************/ 
 const server = app.listen(3003, () => {
