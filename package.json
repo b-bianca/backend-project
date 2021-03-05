@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Projeto FullStack - BackEnd",
   "main": "index.js",
+  "engines": {
+    "node": "v.12.18.0"
+  },
   "scripts": {
     "test": "clear && echo \"Running tests...\" && jest",
     "createTable": "tsc && node ./build/src/migrations/MySqlSetup.js",
