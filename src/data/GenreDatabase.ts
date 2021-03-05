@@ -1,6 +1,7 @@
 import { Music, category } from "../business/entities/Music";
 import BaseDatabase from "./BaseDatabase";
 
+
 export class GenreDatabase extends BaseDatabase {
 
     async getGenre (result: any) {

@@ -1,4 +1,4 @@
-import BaseDatabase from "../data/BaseDatabase";
+import BaseDatabase from "../data/BaseDatabase"
 
 export class MySqlSetup extends BaseDatabase {
 
