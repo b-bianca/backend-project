@@ -22,7 +22,6 @@
   "keywords": [],
   "author": "Bianca Mendes",
   "license": "ISC",
-  "devDependencies": {},
   "dependencies": {
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
