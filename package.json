@@ -12,7 +12,8 @@
     "populateTable": "tsc && node ./build/src/migrations/PopulateTable.js",
     "dev": " ts-node-dev ./src/index.ts",
     "start": "tsc && node ./build/src/index.js",
-    "build": "tsc"
+    "build": "tsc",
+    "heroku-postbuild": "npm run build"
   },
   "repository": {
     "type": "git",
