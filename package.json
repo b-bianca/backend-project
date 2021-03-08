@@ -10,7 +10,7 @@
     "test": "clear && echo \"Running tests...\" && jest",
     "createTable": "tsc && node ./build/src/migrations/MySqlSetup.js",
     "populateTable": "tsc && node ./build/src/migrations/PopulateTable.js",
-    "dev": " ts-node-dev ./src/index.ts",
+    "dev": "ts-node-dev ./src/index.ts",
     "start": "node ./build/src/index.js",
     "build": "tsc"
   },
