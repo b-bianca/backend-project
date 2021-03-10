@@ -179,4 +179,23 @@ export class MusicBusiness {
             }  
         }
     }
+
+    async getAllGenres (token: string) {
+
+        try {
+            
+            const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
+
+            if(!verifyToken) {
+                throw new CustomError(401, "Unauthorized. Verify token")
+            }
+
+            const result = await this.musicDatabase.getAllGenres()
+
+            return  result 
+
+        } catch (error) {
+            throw new CustomError(error.statusCode || 400, error.message)
+        }
+    }
 }

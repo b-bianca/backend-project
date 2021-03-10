@@ -114,6 +114,20 @@ export class MusicDatabase extends BaseDatabase {
             throw new Error(error.sqlMessage || error.message)
         }
     }
+
+    async getAllGenres(): Promise<String[]> {
+        try {
+           
+            const result = await BaseDatabase.connection
+                .select("*")
+                .from(BaseDatabase.GENRES_TABLE)
+                
+                return result
+
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
 }
 
 
