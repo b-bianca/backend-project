@@ -104,4 +104,19 @@ export class MusicController {
             res.status(error.statusCode || 400).send({ error: error.message })
         }
     }
+
+    async getAllGenres(req: Request, res: Response) {
+
+        try {
+
+            const token: string = req.headers.authorization!
+
+            const result = await musicBusiness.getAllGenres(token)
+
+            res.status(201).send({ message: "All genres", result })
+            
+        } catch (error) {
+            res.status(error.statusCode || 400).send({ error: error.message })
+        }
+    }
 }
