@@ -90,6 +90,7 @@ export class PlaylistDatabase extends BaseDatabase {
                     const musicsMap = musics[0].map((music: any) => {
                         return(
                                 {
+                                id: music.id,
                                 title:music.title,
                                 author: music.author,
                                 file: music.file,
