@@ -73,7 +73,7 @@ export class PlaylistDatabase extends BaseDatabase {
         try {
            
              const result = await BaseDatabase.connection
-                .select("playlist_id")
+                .select("*")
                 .from(BaseDatabase.PLAYLIST_MUSICS_TABLE)
                 .where({playlist_id: playlistId})
 
