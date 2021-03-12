@@ -186,7 +186,7 @@ export class PlaylistBusiness {
         }
     }
 
-    async getMusicsByPlaylistId(token: string, id: string) {
+    async getMusicsByPlaylistId(token: string, playlist_id: string) {
         try {
             const verifyToken: authenticationData = this.tokenManager.getTokenData(token) 
 
@@ -194,7 +194,7 @@ export class PlaylistBusiness {
                 throw new CustomError(401, "Unauthorized. Verify token")
             }
 
-            const result = await this.playlistDatabase.getMusicsByPlaylistId(id)
+            const result = await this.playlistDatabase.getMusicsByPlaylistId(playlist_id)
 
             return result
         } catch (error) {
