@@ -48,7 +48,7 @@ export class MySqlSetup extends BaseDatabase {
                id VARCHAR(255) PRIMARY KEY,
                title VARCHAR(60) NOT NULL,
                subtitle VARCHAR(255) NOT NULL,
-               image VARCHAR(255) NULL,
+               image VARCHAR(1000) NULL,
                date DATE DEFAULT (CURDATE()),
                user_id VARCHAR(255) NOT NULL,
                FOREIGN KEY(user_id) REFERENCES ${BaseDatabase.USERS_TABLE}(id) ON DELETE CASCADE
