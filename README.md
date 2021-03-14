@@ -16,8 +16,3 @@ gorgeous-crib.surge.sh
 
 <a href="https://www.linkedin.com">***Bianca Mendes***</a>
 <br/> 
-
-
-### Licença
-
-Este projeto está licenciado sob a licença MIT - consulte a página [LICENSE](https://opensource.org/licenses/MIT) para obter detalhes.
