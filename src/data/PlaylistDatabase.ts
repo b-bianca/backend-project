@@ -1,7 +1,10 @@
+import { reduceEachLeadingCommentRange } from "typescript";
 import { musicsPlaylistInput, Playlist } from "../business/entities/Playlist";
 import BaseDatabase from "./BaseDatabase";
 
 export class PlaylistDatabase extends BaseDatabase {
+
+    
 
     async createPlaylist(playlist: Playlist): Promise<void> {
 
@@ -69,40 +72,22 @@ export class PlaylistDatabase extends BaseDatabase {
         }
     }
 
-    async getMusicsByPlaylistId(playlistId: string): Promise<Playlist[]> {
+    async getMusicsByPlaylistId(playlist_id: string): Promise<any[]> {
         try {
-           
-             const result = await BaseDatabase.connection
-                .select("*")
-                .from(BaseDatabase.PLAYLIST_MUSICS_TABLE)
-                .where({playlist_id: playlistId})
+             
+            const result = await BaseDatabase.connection
+            .column( {LMP_ID: 'lamusic_playlist_musics.id'},{LP_ID: 'lamusic_playlist.id'}, {LP_TITLE: 'lamusic_playlist.title'}, {LM_ID: 'lamusic_musics.id'}, {LM_TITLE: 'lamusic_musics.title' }, 'lamusic_musics.author', 'lamusic_musics.file', 'lamusic_musics.album')
+            .select()
+            .from(BaseDatabase.PLAYLIST_MUSICS_TABLE)
+            .join(`lamusic_playlist`, function() {
+                this.on( 'lamusic_playlist_musics.playlist_id', '=', 'lamusic_playlist.id')
+            })
+            .join(`lamusic_musics`, function() {
+                this.on( 'lamusic_playlist_musics.music_id', '=', 'lamusic_musics.id')
+            })
+            .where('lamusic_playlist_musics.playlist_id', "=", playlist_id)
 
-                for (let i = 0; i < result.length; i++){
-                    const musics = await BaseDatabase.connection.raw(`
-                        SELECT * FROM ${BaseDatabase.PLAYLIST_TABLE} 
-                        JOIN ${BaseDatabase.PLAYLIST_MUSICS_TABLE}
-                        ON ${BaseDatabase.PLAYLIST_TABLE}.id = ${BaseDatabase.PLAYLIST_MUSICS_TABLE}.playlist_id
-                        JOIN ${BaseDatabase.MUSICS_TABLE}
-                        ON ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.PLAYLIST_MUSICS_TABLE}.music_id
-                        WHERE ${BaseDatabase.MUSICS_TABLE}.id = ${BaseDatabase.PLAYLIST_MUSICS_TABLE}.music_id
-                    `)
-                    
-                    const musicsMap = musics[0].map((music: any) => {
-                        return(
-                                {
-                                id: music.id,
-                                title:music.title,
-                                author: music.author,
-                                file: music.file,
-                                album: music.album
-                                }
-                            ) 
-                    })
-    
-                    result[i].musics = musicsMap
-                }    
-               
-            return result[0]
+            return result
 
         } catch (error) {
             throw new Error(error.sqlMessage || error.message)
@@ -125,7 +110,7 @@ export class PlaylistDatabase extends BaseDatabase {
     async deleteMusicFromPlaylist(id: string): Promise<any> {
 
         try {
-           const result =  await BaseDatabase.connection
+           const result = await BaseDatabase.connection
                        .delete()
                        .from(BaseDatabase.PLAYLIST_MUSICS_TABLE)
                        .where({id})

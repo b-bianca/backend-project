@@ -88,11 +88,11 @@ export class PlaylistControler {
         try {
             const token: string = req.headers.authorization!
 
-            const id = req.params.id as string
+            const id= req.params.id as string
 
-            const playlist = await playlistBusiness.getMusicsByPlaylistId(token, id)
+            const musicByPlaylist = await playlistBusiness.getMusicsByPlaylistId(token, id)
 
-            res.status(201).send({ message: "All musics", playlist })
+            res.status(200).send({ message: "All musics", musicByPlaylist })
         } catch (error) {
             
         }
