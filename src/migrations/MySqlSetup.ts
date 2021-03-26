@@ -59,7 +59,7 @@ export class MySqlSetup extends BaseDatabase {
             CREATE TABLE IF NOT EXISTS ${BaseDatabase.PLAYLIST_MUSICS_TABLE} (
                id VARCHAR(255) PRIMARY KEY,
                playlist_id VARCHAR(255) NOT NULL,
-               music_id VARCHAR(255) UNIQUE NOT NULL,
+               music_id VARCHAR(255) NOT NULL,
                FOREIGN KEY(playlist_id) REFERENCES ${BaseDatabase.PLAYLIST_TABLE}(id) ON DELETE CASCADE,
                FOREIGN KEY(music_id) REFERENCES ${BaseDatabase.MUSICS_TABLE}(id) ON DELETE CASCADE
             );
